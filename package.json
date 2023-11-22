@@ -4,15 +4,19 @@
   "type": "module",
   "scripts": {
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix"
   },
   "devDependencies": {
+    "@rocketseat/eslint-config": "^2.1.0",
     "bun-types": "latest",
+    "eslint": "^8.54.0",
     "vite-tsconfig-paths": "^4.2.1",
     "vitest": "^0.34.6"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
-  "dependencies": {}
+  "dependencies": { "eslint-plugin-vitest-globals": "latest" }
 }
