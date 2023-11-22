@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "bun-types": "latest",
+    "vite-tsconfig-paths": "^4.2.1",
     "vitest": "^0.34.6"
   },
   "peerDependencies": {

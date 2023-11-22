@@ -1,5 +1,3 @@
-import { beforeEach, describe, expect, it } from 'vitest'
-
 import { Answer } from '../entities/answer'
 import { Instructor } from '../entities/instructor'
 import { Question } from '../entities/question'
@@ -18,8 +16,8 @@ describe('@use-cases/answer-question', async () => {
   it('should be able to answer a question', async () => {
     const answerQuestion = new AnswerQuestionUseCases(answersRepository)
 
-    const student = new Student({ name: 'john student' })
-    const instructor = new Instructor({ name: 'john instructor' })
+    const student = Student.create({ name: 'john student' })
+    const instructor = Instructor.create({ name: 'john instructor' })
 
     const question = Question.create({
       title: 'title',
@@ -28,8 +26,8 @@ describe('@use-cases/answer-question', async () => {
     })
 
     const { answer } = await answerQuestion.handle({
-      questionId: question.id,
-      authorId: instructor.id,
+      questionId: question.id.toString(),
+      authorId: instructor.id.toString(),
       content: 'anything',
     })
 

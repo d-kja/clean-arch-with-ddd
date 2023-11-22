@@ -15,8 +15,13 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "types": [
-      "bun-types" // add Bun global
+      "bun-types", // add Bun global
+      "vitest/globals"
     ]
   }
 }
