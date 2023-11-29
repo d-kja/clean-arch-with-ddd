@@ -1,5 +1,9 @@
 export class Slug {
-  constructor(private slug: string) {}
+  private constructor(private slug: string) {}
+
+  static create(text: string) {
+    return new Slug(text)
+  }
 
   static fromText(text: string): Slug {
     const slugText = text
