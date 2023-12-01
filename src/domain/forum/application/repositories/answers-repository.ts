@@ -1,3 +1,4 @@
+import { PaginationParams } from '@/core/repository/pagination-params'
 import { Answer } from '../../enterprise/entities/answer'
 
 export abstract class AnswersRepository {
@@ -5,4 +6,8 @@ export abstract class AnswersRepository {
   abstract delete(answer: Answer): Promise<void>
   abstract save(answer: Answer): Promise<void>
   abstract findById(id: string): Promise<Answer | null>
+  abstract findManyByQuestionId(
+    questionId: string,
+    params: PaginationParams,
+  ): Promise<Answer[]>
 }
