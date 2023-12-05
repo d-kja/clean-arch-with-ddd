@@ -1,10 +1,15 @@
 import { UniqueEntityID } from '@/core/entities/value-object/unique-entity-id'
-import { Answer, AnswerProps } from '@/domain/forum/enterprise/entities/answer'
-
+import {
+  QuestionComment,
+  QuestionCommentProps,
+} from '@/domain/forum/enterprise/entities/question-comment'
 import { faker } from '@faker-js/faker'
 
-export function makeAnswer(props?: Partial<AnswerProps>, id?: UniqueEntityID) {
-  return Answer.create(
+export function makeQuestionComment(
+  props?: Partial<QuestionCommentProps>,
+  id?: UniqueEntityID,
+) {
+  return QuestionComment.create(
     {
       authorId: new UniqueEntityID(),
       questionId: new UniqueEntityID(),

@@ -7,7 +7,7 @@ import {
 import { faker } from '@faker-js/faker'
 
 export function makeQuestion(
-  props: Partial<QuestionProps>,
+  props?: Partial<QuestionProps>,
   id?: UniqueEntityID,
 ) {
   return Question.create(
