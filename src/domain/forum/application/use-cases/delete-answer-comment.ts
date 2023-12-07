@@ -1,11 +1,18 @@
+import { Either, Left, Right } from '@/core/errors/either'
+import { EmptyObject } from '@/core/types/generic-types'
 import { AnswerCommentsRepository } from '../repositories/answer-comments-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found.error'
+import { UnauthorizedError } from './errors/unauthorized.error'
 
 export interface DeleteAnswerCommentRequest {
   commentId: string
   authorId: string
 }
 
-export type DeleteAnswerCommentResponse = Record<string, string>
+export type DeleteAnswerCommentResponse = Either<
+  ResourceNotFoundError | UnauthorizedError,
+  EmptyObject
+>
 
 export class DeleteAnswerCommentUseCase {
   constructor(private answerCommentRepository: AnswerCommentsRepository) {}
@@ -16,13 +23,16 @@ export class DeleteAnswerCommentUseCase {
   }: DeleteAnswerCommentRequest): Promise<DeleteAnswerCommentResponse> {
     const answerComment = await this.answerCommentRepository.findById(commentId)
 
-    if (!answerComment) throw new Error('Resource not found')
+    if (!answerComment) {
+      return Left.create(new ResourceNotFoundError())
+    }
 
-    if (answerComment.authorId.toString() !== authorId)
-      throw new Error('Missing permissions')
+    if (answerComment.authorId.toString() !== authorId) {
+      return Left.create(new UnauthorizedError())
+    }
 
     await this.answerCommentRepository.delete(answerComment)
 
-    return {}
+    return Right.create({})
   }
 }
