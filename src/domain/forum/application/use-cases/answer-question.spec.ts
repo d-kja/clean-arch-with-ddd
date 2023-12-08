@@ -25,13 +25,15 @@ describe('@use-cases/answer-question', async () => {
       authorId: student.id,
     })
 
-    const { answer } = await answerQuestion.handle({
+    const result = await answerQuestion.handle({
       questionId: question.id.toString(),
       authorId: instructor.id.toString(),
       content: 'anything',
     })
 
-    expect(answer.id).toBeInstanceOf(UniqueEntityID)
+    if (result.isLeft()) throw new Error()
+
+    expect(result.value.answer.id).toBeInstanceOf(UniqueEntityID)
     expect(answersRepository.items).toHaveLength(1)
   })
 })

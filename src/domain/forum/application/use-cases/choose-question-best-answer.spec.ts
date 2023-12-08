@@ -5,6 +5,7 @@ import { makeQuestion } from 'tests/factories/make-question.factory'
 import { InMemoryAnswersRepository } from 'tests/in-memory/answers-in-memory-repository'
 import { InMemoryQuestionRepository } from 'tests/in-memory/question-in-memory-repository'
 import { ChooseQuestionBestAnswerUseCase } from './choose-question-best-answer'
+import { UnauthorizedError } from './errors/unauthorized.error'
 
 let questionRepository: InMemoryQuestionRepository
 let answerRepository: InMemoryAnswersRepository
@@ -56,11 +57,12 @@ describe('@use-case/choose-question-best-answer', async () => {
     await questionRepository.create(newQuestion)
     await answerRepository.create(newAnswer)
 
-    expect(
-      sut.handle({
-        answerId: 'answer-id',
-        authorId: 'fake-author',
-      }),
-    ).rejects.toBeInstanceOf(Error)
+    const result = await sut.handle({
+      answerId: 'answer-id',
+      authorId: 'fake-author',
+    })
+
+    expect(result.isLeft()).toBeTruthy()
+    expect(result.value).toBeInstanceOf(UnauthorizedError)
   })
 })
