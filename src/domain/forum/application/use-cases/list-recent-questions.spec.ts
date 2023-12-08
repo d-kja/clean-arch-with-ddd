@@ -23,11 +23,11 @@ describe('@use-case/list-recent-questions', async () => {
     vi.setSystemTime(new Date(2023, 0, 20))
     await questionRepository.create(makeQuestion({}))
 
-    const { questions } = await sut.handle({
+    const result = await sut.handle({
       page: 1,
     })
 
-    expect(questions).toEqual([
+    expect(result.value?.questions).toEqual([
       expect.objectContaining({
         createdAt: new Date(2023, 0, 20),
       }),
@@ -47,10 +47,10 @@ describe('@use-case/list-recent-questions', async () => {
       await questionRepository.create(makeQuestion({}))
     }
 
-    const { questions } = await sut.handle({
+    const result = await sut.handle({
       page: 2,
     })
 
-    expect(questions).toHaveLength(2)
+    expect(result.value?.questions).toHaveLength(2)
   })
 })

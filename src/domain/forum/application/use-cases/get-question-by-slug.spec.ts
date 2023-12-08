@@ -21,11 +21,15 @@ describe('@use-case/get-question-by-slug', async () => {
 
     await questionRepository.create(newQuestion)
 
-    const { question } = await sut.handle({
+    const result = await sut.handle({
       slug: 'example-slug',
     })
 
-    expect(question.id).toBeInstanceOf(UniqueEntityID)
+    expect(result.isRight()).toBe(true)
+
+    if (!result.isRight()) throw new Error('Invalid test')
+
+    expect(result.value.question.id).toBeInstanceOf(UniqueEntityID)
     expect(questionRepository.items).toHaveLength(1)
   })
 })

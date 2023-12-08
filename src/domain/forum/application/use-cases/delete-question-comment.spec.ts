@@ -1,6 +1,7 @@
 import { makeQuestionComment } from 'tests/factories/make-question-comment.factory'
 import { InMemoryQuestionCommentRepository } from 'tests/in-memory/question-comments-in-memory-repository'
 import { DeleteQuestionCommentUseCase } from './delete-question-comment'
+import { UnauthorizedError } from './errors/unauthorized.error'
 
 let questionCommentRepository: InMemoryQuestionCommentRepository
 let sut: DeleteQuestionCommentUseCase
@@ -28,11 +29,11 @@ describe('@use-case/delete-question-comment', async () => {
     const questionComment = makeQuestionComment()
     await questionCommentRepository.create(questionComment)
 
-    expect(
-      sut.handle({
-        commentId: questionComment.id.toString(),
-        authorId: 'invalid-user',
-      }),
-    ).rejects.toBeInstanceOf(Error)
+    const result = await sut.handle({
+      commentId: questionComment.id.toString(),
+      authorId: 'invalid-user',
+    })
+
+    expect(result.value).toBeInstanceOf(UnauthorizedError)
   })
 })

@@ -29,12 +29,12 @@ describe('@use-case/list-answer-comments', async () => {
       }),
     )
 
-    const { answerComments } = await sut.handle({
+    const result = await sut.handle({
       answerId: 'answer-id',
       page: 1,
     })
 
-    expect(answerComments).toHaveLength(3)
+    expect(result.value?.answerComments).toHaveLength(3)
   })
 
   it('should return a paginated result', async () => {
@@ -46,11 +46,11 @@ describe('@use-case/list-answer-comments', async () => {
       )
     }
 
-    const { answerComments } = await sut.handle({
+    const result = await sut.handle({
       answerId: 'answer-id',
       page: 2,
     })
 
-    expect(answerComments).toHaveLength(2)
+    expect(result.value?.answerComments).toHaveLength(2)
   })
 })

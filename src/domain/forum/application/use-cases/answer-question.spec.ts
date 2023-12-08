@@ -31,7 +31,7 @@ describe('@use-cases/answer-question', async () => {
       content: 'anything',
     })
 
-    if (result.isLeft()) throw new Error()
+    if (result.isLeft()) throw new Error('invalid test')
 
     expect(result.value.answer.id).toBeInstanceOf(UniqueEntityID)
     expect(answersRepository.items).toHaveLength(1)

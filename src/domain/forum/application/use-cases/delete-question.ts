@@ -1,10 +1,17 @@
+import { Either, Left, Right } from '@/core/errors/either'
+import { EmptyObject } from '@/core/types/generic-types'
 import { QuestionRepository } from '../repositories/question-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found.error'
+import { UnauthorizedError } from './errors/unauthorized.error'
 
 export interface DeleteQuestionRequest {
   questionId: string
   authorId: string
 }
-export type DeleteQuestionResponse = Record<string, string>
+export type DeleteQuestionResponse = Either<
+  ResourceNotFoundError | UnauthorizedError,
+  EmptyObject
+>
 
 export class DeleteQuestionUseCase {
   constructor(private questionRepository: QuestionRepository) {}
@@ -15,13 +22,13 @@ export class DeleteQuestionUseCase {
   }: DeleteQuestionRequest): Promise<DeleteQuestionResponse> {
     const question = await this.questionRepository.findById(questionId)
 
-    if (!question) throw new Error('Resource not found')
+    if (!question) return Left.create(new ResourceNotFoundError())
 
     if (question.authorId.toString() !== authorId)
-      throw new Error('Not allowed')
+      return Left.create(new UnauthorizedError())
 
     await this.questionRepository.delete(question)
 
-    return {}
+    return Right.create({})
   }
 }

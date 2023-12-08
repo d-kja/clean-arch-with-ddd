@@ -19,13 +19,15 @@ describe('@use-case/comment-on-answer', async () => {
     const answer = makeAnswer()
     await answerRepository.create(answer)
 
-    const { answerComment } = await sut.handle({
+    const result = await sut.handle({
       answerId: answer.id.toString(),
       authorId: 'author-id',
       content: 'content',
     })
 
-    expect(answerComment.id).toBeTruthy()
+    if (result.isLeft()) throw new Error('invalid test')
+
+    expect(result.value.answerComment.id).toBeTruthy()
     expect(answerCommentRepository.items[0].authorId.toString()).toEqual(
       'author-id',
     )

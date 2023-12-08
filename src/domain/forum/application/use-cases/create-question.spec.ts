@@ -13,13 +13,13 @@ describe('@use-case/create-question', async () => {
   })
 
   it('should be able to create a new question', async () => {
-    const { question } = await sut.handle({
+    const result = await sut.handle({
       title: 'example',
       content: '...',
       authorId: '...',
     })
 
-    expect(question.id).toBeInstanceOf(UniqueEntityID)
+    expect(result.value?.question.id).toBeInstanceOf(UniqueEntityID)
     expect(questionRepository.items).toHaveLength(1)
   })
 })

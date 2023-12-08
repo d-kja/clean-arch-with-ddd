@@ -38,11 +38,11 @@ describe('@use-case/delete-question', async () => {
     )
     await questionRepository.create(newQuestion)
 
-    expect(
-      sut.handle({
-        authorId: 'author-2',
-        questionId: 'question',
-      }),
-    ).rejects.toBeInstanceOf(Error)
+    const result = await sut.handle({
+      authorId: 'author-2',
+      questionId: 'question',
+    })
+
+    expect(result.value).toBeInstanceOf(Error)
   })
 })
