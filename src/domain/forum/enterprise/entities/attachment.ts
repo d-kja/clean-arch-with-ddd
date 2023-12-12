@@ -1,0 +1,21 @@
+import { Entity } from '@/core/entities/entity'
+import { UniqueEntityID } from '@/core/entities/value-object/unique-entity-id'
+
+export interface AttachmentProps {
+  title: string
+  link: string
+}
+
+export class Attachment<Props extends AttachmentProps> extends Entity<Props> {
+  get title() {
+    return this.props.title
+  }
+
+  get link() {
+    return this.props.link
+  }
+
+  static create(props: AttachmentProps, id: UniqueEntityID) {
+    return new Attachment(props, id)
+  }
+}
