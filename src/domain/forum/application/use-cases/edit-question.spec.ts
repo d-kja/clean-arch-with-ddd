@@ -26,6 +26,7 @@ describe('@use-case/delete-question', async () => {
       questionId: 'question',
       title: 'title',
       content: 'content',
+      attachmentsIds: [],
     })
 
     expect(questionRepository.items[0]).toMatchObject({
@@ -48,6 +49,7 @@ describe('@use-case/delete-question', async () => {
       questionId: 'question',
       title: 'title',
       content: 'content',
+      attachmentsIds: [],
     })
 
     expect(result.value).toBeInstanceOf(Error)

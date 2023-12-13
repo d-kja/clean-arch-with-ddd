@@ -4,6 +4,7 @@ import { Slug } from './object-value/slug'
 
 import { AggregateRoot } from '@/core/entities/aggregate-root'
 import { Optional } from '@/core/types/optional'
+import { QuestionAttachmentList } from './question-attachment-list'
 
 export interface QuestionProps {
   authorId: UniqueEntityID
@@ -12,6 +13,7 @@ export interface QuestionProps {
   slug: Slug
   title: string
   content: string
+  attachments: QuestionAttachmentList
 
   createdAt: Date
   updatedAt?: Date
@@ -58,6 +60,14 @@ export class Question extends AggregateRoot<QuestionProps> {
     return this.content.substring(0, 120).trimEnd().concat('...')
   }
 
+  get attachments() {
+    return this.props.attachments
+  }
+
+  set attachments(attachments: QuestionAttachmentList) {
+    this.props.attachments = attachments
+  }
+
   get createdAt() {
     return this.props.createdAt
   }
@@ -71,7 +81,7 @@ export class Question extends AggregateRoot<QuestionProps> {
   }
 
   static create(
-    props: Optional<QuestionProps, 'slug' | 'createdAt'>,
+    props: Optional<QuestionProps, 'slug' | 'createdAt' | 'attachments'>,
     id?: UniqueEntityID,
   ) {
     return new Question(
@@ -79,6 +89,7 @@ export class Question extends AggregateRoot<QuestionProps> {
         ...props,
         slug: props.slug ?? Slug.fromText(props.title),
         createdAt: props.createdAt ?? new Date(),
+        attachments: props.attachments ?? new QuestionAttachmentList(),
       },
       id,
     )

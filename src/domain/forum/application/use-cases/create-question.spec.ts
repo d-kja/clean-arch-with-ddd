@@ -17,9 +17,16 @@ describe('@use-case/create-question', async () => {
       title: 'example',
       content: '...',
       authorId: '...',
+      attachmentsIds: ['1', '2'],
     })
 
     expect(result.value?.question.id).toBeInstanceOf(UniqueEntityID)
     expect(questionRepository.items).toHaveLength(1)
+    expect(questionRepository.items[0]).toEqual(result.value?.question)
+    expect(questionRepository.items[0].attachments.currentItems).toHaveLength(2)
+    expect(questionRepository.items[0].attachments.currentItems).toEqual([
+      expect.objectContaining({ attachmentId: new UniqueEntityID('1') }),
+      expect.objectContaining({ attachmentId: new UniqueEntityID('2') }),
+    ])
   })
 })

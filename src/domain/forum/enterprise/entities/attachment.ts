@@ -6,7 +6,7 @@ export interface AttachmentProps {
   link: string
 }
 
-export class Attachment<Props extends AttachmentProps> extends Entity<Props> {
+export class Attachment extends Entity<AttachmentProps> {
   get title() {
     return this.props.title
   }
