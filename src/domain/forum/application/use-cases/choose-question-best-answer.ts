@@ -1,9 +1,9 @@
 import { Either, Left, Right } from '@/core/errors/either'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found.error'
+import { UnauthorizedError } from '@/core/errors/unauthorized.error'
 import { Question } from '../../enterprise/entities/question'
 import { AnswersRepository } from '../repositories/answers-repository'
 import { QuestionRepository } from '../repositories/question-repository'
-import { ResourceNotFoundError } from './errors/resource-not-found.error'
-import { UnauthorizedError } from './errors/unauthorized.error'
 
 interface ChooseQuestionBestAnswerRequest {
   authorId: string

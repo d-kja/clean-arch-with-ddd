@@ -1,8 +1,8 @@
 import { UniqueEntityID } from '@/core/entities/value-object/unique-entity-id'
+import { UnauthorizedError } from '@/core/errors/unauthorized.error'
 import { makeAnswer } from 'tests/factories/make-answer.factory'
 import { InMemoryAnswersRepository } from 'tests/in-memory/answers-in-memory-repository'
 import { DeleteAnswerUseCase } from './delete-answer'
-import { UnauthorizedError } from './errors/unauthorized.error'
 
 let answerRepository: InMemoryAnswersRepository
 let sut: DeleteAnswerUseCase

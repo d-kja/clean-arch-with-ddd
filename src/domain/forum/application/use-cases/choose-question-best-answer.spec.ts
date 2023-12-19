@@ -1,19 +1,24 @@
 import { UniqueEntityID } from '@/core/entities/value-object/unique-entity-id'
 
+import { UnauthorizedError } from '@/core/errors/unauthorized.error'
 import { makeAnswer } from 'tests/factories/make-answer.factory'
 import { makeQuestion } from 'tests/factories/make-question.factory'
 import { InMemoryAnswersRepository } from 'tests/in-memory/answers-in-memory-repository'
+import { InMemoryQuestionAttachmentsRepository } from 'tests/in-memory/question-attachments-in-memory-repository'
 import { InMemoryQuestionRepository } from 'tests/in-memory/question-in-memory-repository'
 import { ChooseQuestionBestAnswerUseCase } from './choose-question-best-answer'
-import { UnauthorizedError } from './errors/unauthorized.error'
 
+let questionAttachmentRepository: InMemoryQuestionAttachmentsRepository
 let questionRepository: InMemoryQuestionRepository
 let answerRepository: InMemoryAnswersRepository
 let sut: ChooseQuestionBestAnswerUseCase
 
 describe('@use-case/choose-question-best-answer', async () => {
   beforeEach(() => {
-    questionRepository = new InMemoryQuestionRepository()
+    questionAttachmentRepository = new InMemoryQuestionAttachmentsRepository()
+    questionRepository = new InMemoryQuestionRepository(
+      questionAttachmentRepository,
+    )
     answerRepository = new InMemoryAnswersRepository()
     sut = new ChooseQuestionBestAnswerUseCase(
       questionRepository,

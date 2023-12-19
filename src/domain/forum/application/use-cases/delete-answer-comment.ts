@@ -1,8 +1,8 @@
 import { Either, Left, Right } from '@/core/errors/either'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found.error'
+import { UnauthorizedError } from '@/core/errors/unauthorized.error'
 import { EmptyObject } from '@/core/types/generic-types'
 import { AnswerCommentsRepository } from '../repositories/answer-comments-repository'
-import { ResourceNotFoundError } from './errors/resource-not-found.error'
-import { UnauthorizedError } from './errors/unauthorized.error'
 
 export interface DeleteAnswerCommentRequest {
   commentId: string

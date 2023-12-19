@@ -1,7 +1,7 @@
+import { UnauthorizedError } from '@/core/errors/unauthorized.error'
 import { makeQuestionComment } from 'tests/factories/make-question-comment.factory'
 import { InMemoryQuestionCommentRepository } from 'tests/in-memory/question-comments-in-memory-repository'
 import { DeleteQuestionCommentUseCase } from './delete-question-comment'
-import { UnauthorizedError } from './errors/unauthorized.error'
 
 let questionCommentRepository: InMemoryQuestionCommentRepository
 let sut: DeleteQuestionCommentUseCase

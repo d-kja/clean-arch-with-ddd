@@ -1,12 +1,12 @@
 import { UniqueEntityID } from '@/core/entities/value-object/unique-entity-id'
 import { Either, Left, Right } from '@/core/errors/either'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found.error'
+import { UnauthorizedError } from '@/core/errors/unauthorized.error'
 import { Question } from '../../enterprise/entities/question'
 import { QuestionAttachment } from '../../enterprise/entities/question-attachment'
 import { QuestionAttachmentList } from '../../enterprise/entities/question-attachment-list'
 import { QuestionAttachmentRepository } from '../repositories/question-attachments-repository'
 import { QuestionRepository } from '../repositories/question-repository'
-import { ResourceNotFoundError } from './errors/resource-not-found.error'
-import { UnauthorizedError } from './errors/unauthorized.error'
 
 export interface EditQuestionRequest {
   questionId: string
