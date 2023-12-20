@@ -12,7 +12,7 @@ export class DomainEvents {
   private static eventCallbacks: Record<string, DomainEventCallback[]> = {}
 
   // WHENEVER A NEW EVENT IS CREATED IN AN ENTITY CLASS IT PUSHES TO THE LIST THE CURRENT CLASS WITH EVENTS AVAILABLE
-  public static markEntityWithEventForDispatch(entity: GenericEntityType) {
+  public static markEntityWithEventsForDispatch(entity: GenericEntityType) {
     const entityFound = this.findMarkedEntityById(entity.id)
     const doesEntityExist = !!entityFound
 

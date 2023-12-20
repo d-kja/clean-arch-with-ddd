@@ -14,6 +14,14 @@ export class Entity<Props = unknown> {
   }
 
   public equals(entity: Entity) {
-    return this._id.equals(entity._id)
+    if (entity === this) {
+      return true
+    }
+
+    if (entity.id === this._id) {
+      return true
+    }
+
+    return false
   }
 }

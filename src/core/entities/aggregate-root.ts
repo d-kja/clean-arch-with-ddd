@@ -17,6 +17,6 @@ export abstract class AggregateRoot<Props> extends Entity<Props> {
     this._domainEvent.push(event)
 
     // MARK CURRENT CLASS FOR DISPATCH WHENEVER IT CREATES A NEW EVENT
-    DomainEvents.markEntityWithEventForDispatch(this)
+    DomainEvents.markEntityWithEventsForDispatch(this)
   }
 }
