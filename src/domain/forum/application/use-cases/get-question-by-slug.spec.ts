@@ -1,35 +1,38 @@
-import { UniqueEntityID } from '@/core/entities/value-object/unique-entity-id'
+import { UniqueEntityID } from "@/core/entities/value-object/unique-entity-id";
 
-import { makeQuestion } from 'tests/factories/make-question.factory'
-import { InMemoryQuestionRepository } from 'tests/in-memory/question-in-memory-repository'
-import { Slug } from '../../enterprise/entities/object-value/slug'
-import { GetQuestionBySlugUseCase } from './get-question-by-slug'
+import { makeQuestion } from "tests/factories/make-question.factory";
+import { InMemoryQuestionRepository } from "tests/in-memory/question-in-memory-repository";
+import { Slug } from "../../enterprise/entities/object-value/slug";
+import { GetQuestionBySlugUseCase } from "./get-question-by-slug";
+import { InMemoryQuestionAttachmentsRepository } from "tests/in-memory/question-attachments-in-memory-repository";
 
-let questionRepository: InMemoryQuestionRepository
-let sut: GetQuestionBySlugUseCase
+let questionRepository: InMemoryQuestionRepository;
+let sut: GetQuestionBySlugUseCase;
 
-describe('@use-case/get-question-by-slug', async () => {
-  beforeEach(() => {
-    questionRepository = new InMemoryQuestionRepository()
-    sut = new GetQuestionBySlugUseCase(questionRepository)
-  })
+describe("@use-case/get-question-by-slug", async () => {
+	beforeEach(() => {
+		questionRepository = new InMemoryQuestionRepository(
+			new InMemoryQuestionAttachmentsRepository(),
+		);
+		sut = new GetQuestionBySlugUseCase(questionRepository);
+	});
 
-  it('should be able to get a question by the slug', async () => {
-    const newQuestion = makeQuestion({
-      slug: Slug.create('example-slug'),
-    })
+	it("should be able to get a question by the slug", async () => {
+		const newQuestion = makeQuestion({
+			slug: Slug.create("example-slug"),
+		});
 
-    await questionRepository.create(newQuestion)
+		await questionRepository.create(newQuestion);
 
-    const result = await sut.handle({
-      slug: 'example-slug',
-    })
+		const result = await sut.handle({
+			slug: "example-slug",
+		});
 
-    expect(result.isRight()).toBe(true)
+		expect(result.isRight()).toBe(true);
 
-    if (!result.isRight()) throw new Error('Invalid test')
+		if (!result.isRight()) throw new Error("Invalid test");
 
-    expect(result.value.question.id).toBeInstanceOf(UniqueEntityID)
-    expect(questionRepository.items).toHaveLength(1)
-  })
-})
+		expect(result.value.question.id).toBeInstanceOf(UniqueEntityID);
+		expect(questionRepository.items).toHaveLength(1);
+	});
+});
