@@ -1,73 +1,80 @@
-import { Entity } from "@/core/entities/entity";
-import { UniqueEntityID } from "@/core/entities/value-object/unique-entity-id";
-import { Optional } from "@/core/types/optional";
-import { AnswerAttachmentList } from "./answer-attachment-list";
+import { Entity } from "@/core/entities/entity"
+import { UniqueEntityID } from "@/core/entities/value-object/unique-entity-id"
+import { Optional } from "@/core/types/optional"
+import { AnswerAttachmentList } from "./answer-attachment-list"
+import { AggregateRoot } from "@/core/entities/aggregate-root"
+import { AnswerCreatedEvent } from "../events/answer-created-event"
 
 export interface AnswerProps {
-	authorId: UniqueEntityID;
-	questionId: UniqueEntityID;
+	authorId: UniqueEntityID
+	questionId: UniqueEntityID
 
-	content: string;
-	attachments: AnswerAttachmentList;
+	content: string
+	attachments: AnswerAttachmentList
 
-	createdAt: Date;
-	updatedAt?: Date;
+	createdAt: Date
+	updatedAt?: Date
 }
 
-export class Answer extends Entity<AnswerProps> {
+export class Answer extends AggregateRoot<AnswerProps> {
 	get authorId() {
-		return this.props.authorId;
+		return this.props.authorId
 	}
 
 	get questionId() {
-		return this.props.questionId;
+		return this.props.questionId
 	}
 
 	get content() {
-		return this.props.content;
+		return this.props.content
 	}
 
 	set content(content: string) {
-		this.props.content = content;
-		this.touch();
+		this.props.content = content
+		this.touch()
 	}
 
 	get attachments() {
-		return this.props.attachments;
+		return this.props.attachments
 	}
 
 	set attachments(attachments: AnswerAttachmentList) {
-		this.props.attachments = attachments;
-		this.touch();
+		this.props.attachments = attachments
+		this.touch()
 	}
 
 	get excerpt() {
-		return this.content.substring(0, 120).trimEnd().concat("...");
+		return this.content.substring(0, 120).trimEnd().concat("...")
 	}
 
 	get createdAt() {
-		return this.props.createdAt;
+		return this.props.createdAt
 	}
 
 	get updatedAt() {
-		return this.props.updatedAt;
+		return this.props.updatedAt
 	}
 
 	private touch() {
-		this.props.updatedAt = new Date();
+		this.props.updatedAt = new Date()
 	}
 
 	static create(
 		props: Optional<AnswerProps, "createdAt" | "attachments">,
 		id?: UniqueEntityID,
 	) {
-		return new Answer(
+		const answer = new Answer(
 			{
 				...props,
 				createdAt: props.createdAt ?? new Date(),
 				attachments: props.attachments ?? new AnswerAttachmentList(),
 			},
 			id,
-		);
+		)
+
+		const isNewAnswer = !id
+		if (isNewAnswer) answer.addDomainEvent(new AnswerCreatedEvent(answer))
+
+		return answer
 	}
 }
