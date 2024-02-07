@@ -2,7 +2,8 @@ import { AggregateRoot } from "../entities/aggregate-root"
 import { UniqueEntityID } from "../entities/value-object/unique-entity-id"
 import { DomainEvent } from "./domain-event"
 
-type DomainEventCallback = (event: unknown) => void
+// biome-ignore lint/suspicious/noExplicitAny: Generic subscriber, the input is unknown/any
+type DomainEventCallback = (event: any) => void
 type GenericEntityType = AggregateRoot<unknown>
 
 export class DomainEvents {

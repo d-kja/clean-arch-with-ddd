@@ -1,64 +1,69 @@
-import { PaginationParams } from '@/core/repository/pagination-params'
-import { QuestionAttachmentRepository } from '@/domain/forum/application/repositories/question-attachments-repository'
-import { QuestionRepository } from '@/domain/forum/application/repositories/question-repository'
-import { Question } from '@/domain/forum/enterprise/entities/question'
+import { DomainEvents } from "@/core/events/domain-events"
+import { PaginationParams } from "@/core/repository/pagination-params"
+import { QuestionAttachmentRepository } from "@/domain/forum/application/repositories/question-attachments-repository"
+import { QuestionRepository } from "@/domain/forum/application/repositories/question-repository"
+import { Question } from "@/domain/forum/enterprise/entities/question"
 
 export class InMemoryQuestionRepository implements QuestionRepository {
-  items: Question[] = []
+	items: Question[] = []
 
-  constructor(
-    private questionAttachmentRepository: QuestionAttachmentRepository,
-  ) {}
+	constructor(
+		private questionAttachmentRepository: QuestionAttachmentRepository,
+	) {}
 
-  async create(question: Question): Promise<void> {
-    this.items.push(question)
-  }
+	async create(question: Question): Promise<void> {
+		this.items.push(question)
 
-  async delete(question: Question): Promise<void> {
-    const questionIndex = this.items.findIndex(
-      (item) => item.id.toString() === question.id.toString(),
-    )
+		DomainEvents.dispatchEventsForEntity(question.id)
+	}
 
-    if (questionIndex > -1) {
-      this.items.splice(questionIndex, 1)
-    }
+	async delete(question: Question): Promise<void> {
+		const questionIndex = this.items.findIndex(
+			(item) => item.id.toString() === question.id.toString(),
+		)
 
-    await this.questionAttachmentRepository.deleteManyByQuestionId(
-      question.id.toString(),
-    )
-  }
+		if (questionIndex > -1) {
+			this.items.splice(questionIndex, 1)
+		}
 
-  async save(question: Question): Promise<void> {
-    const questionIndex = this.items.findIndex(
-      (item) => item.id.toString() === question.id.toString(),
-    )
+		await this.questionAttachmentRepository.deleteManyByQuestionId(
+			question.id.toString(),
+		)
+	}
 
-    this.items[questionIndex] = question
-  }
+	async save(question: Question): Promise<void> {
+		const questionIndex = this.items.findIndex(
+			(item) => item.id.toString() === question.id.toString(),
+		)
 
-  async findById(id: string): Promise<Question | null> {
-    const question = this.items.find((item) => item.id.toString() === id)
+		this.items[questionIndex] = question
 
-    if (!question) return null
+		DomainEvents.dispatchEventsForEntity(question.id)
+	}
 
-    return question
-  }
+	async findById(id: string): Promise<Question | null> {
+		const question = this.items.find((item) => item.id.toString() === id)
 
-  async findBySlug(slug: string): Promise<Question | null> {
-    const question = this.items.find((item) => item.slug.value === slug)
+		if (!question) return null
 
-    if (!question) return null
+		return question
+	}
 
-    return question
-  }
+	async findBySlug(slug: string): Promise<Question | null> {
+		const question = this.items.find((item) => item.slug.value === slug)
 
-  async findManyRecent({ page }: PaginationParams): Promise<Question[]> {
-    const perPage = 20
+		if (!question) return null
 
-    const questions = this.items
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-      .slice((page - 1) * perPage, page * perPage)
+		return question
+	}
 
-    return questions
-  }
+	async findManyRecent({ page }: PaginationParams): Promise<Question[]> {
+		const perPage = 20
+
+		const questions = this.items
+			.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+			.slice((page - 1) * perPage, page * perPage)
+
+		return questions
+	}
 }
